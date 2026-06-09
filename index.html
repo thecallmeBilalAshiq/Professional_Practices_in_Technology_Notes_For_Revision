@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPIT Master Revision | Muhammad Bilal Ashiq</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap');
+        
+        body { margin: 0; font-family: 'Space Grotesk', sans-serif; background-color: #030305; color: #ffffff; min-height: 100vh; }
+        
+        /* Fixed 3D background behind the scrolling content */
+        #canvas-container { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+        
+        /* Superb Glassmorphism */
+        .glass-panel { 
+            background: rgba(10, 15, 30, 0.45); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid rgba(0, 255, 200, 0.2); 
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7); 
+        }
+        
+        .gradient-text { background: linear-gradient(90deg, #00ffc8, #0077ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* Tab Button Animations */
+        .tab-btn { position: relative; overflow: hidden; transition: all 0.3s; padding-bottom: 4px; }
+        .tab-btn::after { content: ''; position: absolute; bottom: 0; left: 0; width: 0%; height: 2px; background: #00ffc8; transition: width 0.3s ease; }
+        .tab-btn:hover::after { width: 100%; }
+        .tab-btn.active::after { width: 100%; }
+        .tab-btn.active { color: #00ffc8; text-shadow: 0 0 12px rgba(0, 255, 200, 0.5); }
+        
+        /* Social Icons Hover Glow */
+        .social-icon { transition: all 0.3s ease; color: #9ca3af; }
+        .social-icon:hover { color: #00ffc8; filter: drop-shadow(0 0 8px rgba(0, 255, 200, 0.6)); transform: translateY(-2px); }
+    </style>
+</head>
+<body class="antialiased relative">
+
+    <div id="canvas-container"></div>
+
+    <div class="relative z-10 max-w-[95vw] md:max-w-7xl mx-auto py-8 flex flex-col gap-6">
+        
+        <header class="glass-panel rounded-3xl p-6 md:p-8 flex flex-col lg:flex-row justify-between items-center gap-6">
+            
+            <div class="text-center lg:text-left">
+                <h1 class="text-2xl md:text-4xl font-bold tracking-tight mb-2">PPIT <span class="gradient-text">Master Revision</span></h1>
+                <div class="text-sm md:text-base text-gray-400 font-mono">Professional Practices in Technology</div>
+            </div>
+
+            <nav class="flex flex-wrap justify-center gap-4 md:gap-8">
+                <button class="tab-btn active text-sm md:text-lg font-bold uppercase tracking-widest text-gray-300" onclick="loadTab('mid1', this)">Mid - 01</button>
+                <button class="tab-btn text-sm md:text-lg font-bold uppercase tracking-widest text-gray-300" onclick="loadTab('mid2', this)">Mid - 02</button>
+                <button class="tab-btn text-sm md:text-lg font-bold uppercase tracking-widest text-gray-300" onclick="loadTab('final', this)">Final</button>
+                
+                <a href="https://thecallmebilalashiq.github.io/portfolio/" target="_blank" class="tab-btn text-sm md:text-lg font-bold uppercase tracking-widest text-cyan-400 hover:text-cyan-300 border-l border-gray-600 pl-4 md:pl-8 ml-2">
+                    About Author
+                </a>
+            </nav>
+
+            <div class="flex items-center gap-5">
+                <a href="https://www.linkedin.com/in/bilal-ashiq/" target="_blank" class="social-icon">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                </a>
+                <a href="https://github.com/thecallmeBilalAshiq" target="_blank" class="social-icon">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                </a>
+                <a href="https://instagram.com/" target="_blank" class="social-icon">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                </a>
+                <a href="https://facebook.com/" target="_blank" class="social-icon">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                </a>
+            </div>
+        </header>
+
+        <div class="glass-panel rounded-3xl w-full h-[85vh] overflow-hidden shadow-2xl shadow-cyan-900/20 border border-cyan-500/30">
+            <iframe id="viewer" class="w-full h-full border-0"></iframe>
+        </div>
+        
+    </div>
+
+    <textarea id="data-mid1" style="display:none;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <style>
+    :root{ --bg1:#07111f; --bg2:#0f2347; --card:#ffffff12; --card2:#ffffff1f; --text:#f8fbff; --muted:#c9d7ea; --accent:#7cf7d4; --accent2:#ffd166; --accent3:#ff6b9a; --accent4:#8ab4ff; --good:#57e389; --bad:#ff6b6b; --border:#ffffff2b; --shadow: 0 20px 70px rgba(0,0,0,.35); }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{ margin:0; font-family: Inter, Segoe UI, Arial, sans-serif; color:var(--text); background: radial-gradient(circle at 10% 10%, rgba(124,247,212,.20), transparent 30%), radial-gradient(circle at 90% 20%, rgba(255,107,154,.20), transparent 30%), linear-gradient(135deg, var(--bg1), var(--bg2)); min-height:100vh; line-height:1.65; }
+    .noise{ position:fixed; inset:0; pointer-events:none; opacity:.12; background-image: radial-gradient(#fff 1px, transparent 1px); background-size: 28px 28px; mask-image: linear-gradient(to bottom, transparent, #000 10%, #000 85%, transparent); }
+    header{ padding:54px 22px 34px; max-width:1180px; margin:auto; position:relative; }
+    .hero{ border:1px solid var(--border); background:linear-gradient(135deg, rgba(255,255,255,.18), rgba(255,255,255,.06)); border-radius:32px; padding:38px; box-shadow:var(--shadow); backdrop-filter: blur(18px); overflow:hidden; position:relative; }
+    .hero:before{ content:""; position:absolute; width:360px; height:360px; border-radius:50%; background:radial-gradient(circle, rgba(124,247,212,.35), transparent 65%); right:-130px; top:-130px; }
+    .tag{ display:inline-flex; gap:8px; align-items:center; padding:8px 14px; border:1px solid var(--border); border-radius:999px; background:rgba(0,0,0,.18); color:var(--accent); font-weight:700; letter-spacing:.3px; }
+    h1{ font-size:clamp(2rem, 5vw, 4.5rem); line-height:1.05; margin:18px 0 14px; max-width:900px; }
+    .gradient{ background:linear-gradient(90deg, var(--accent), var(--accent2), var(--accent3)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+    .subtitle{ font-size:1.1rem; color:var(--muted); max-width:900px; margin:0 0 24px; }
+    .hero-actions{ display:flex; flex-wrap:wrap; gap:12px; margin-top:22px; }
+    button, .btn{ border:0; cursor:pointer; border-radius:16px; padding:12px 18px; font-weight:800; color:#06101d; background:linear-gradient(135deg, var(--accent), var(--accent2)); box-shadow:0 12px 28px rgba(0,0,0,.28); text-decoration:none; display:inline-flex; align-items:center; gap:8px; }
+    .btn.secondary{ color:var(--text); background:rgba(255,255,255,.12); border:1px solid var(--border); }
+    nav{ position:sticky; top:0; z-index:20; backdrop-filter:blur(18px); background:rgba(7,17,31,.74); border-bottom:1px solid var(--border); }
+    .nav-inner{ max-width:1180px; margin:auto; display:flex; gap:10px; overflow:auto; padding:12px 18px; }
+    .nav-inner a{ color:var(--muted); text-decoration:none; white-space:nowrap; border:1px solid var(--border); border-radius:999px; padding:8px 12px; font-size:.92rem; background:rgba(255,255,255,.06); }
+    .nav-inner a:hover{color:var(--text); border-color:var(--accent)}
+    main{max-width:1180px; margin:auto; padding:24px 20px 70px}
+    section{ margin:28px 0; border:1px solid var(--border); background:linear-gradient(135deg, rgba(255,255,255,.13), rgba(255,255,255,.055)); border-radius:26px; padding:26px; box-shadow:0 16px 45px rgba(0,0,0,.18); }
+    h2{font-size:clamp(1.45rem, 3vw, 2.3rem); margin:0 0 18px} h3{font-size:1.25rem; margin:0 0 12px; color:var(--accent2)} h4{margin:14px 0 8px; color:var(--accent)} p{color:var(--muted)}
+    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:16px}
+    .card{ grid-column:span 4; border:1px solid var(--border); background:rgba(0,0,0,.18); border-radius:22px; padding:18px; min-height:150px; }
+    .card.big{grid-column:span 6} .card.full{grid-column:1/-1} .card h3{display:flex; align-items:center; gap:8px}
+    .pill{ display:inline-block; border-radius:999px; padding:4px 10px; background:rgba(124,247,212,.14); border:1px solid rgba(124,247,212,.35); color:var(--accent); font-size:.82rem; font-weight:800; margin:3px 4px 3px 0; }
+    .exam{ border-left:5px solid var(--accent2); background:rgba(255,209,102,.10); padding:14px 16px; border-radius:16px; margin-top:12px; color:#fff4cc; }
+    .simple{ border-left:5px solid var(--accent); background:rgba(124,247,212,.10); padding:14px 16px; border-radius:16px; margin-top:12px; color:#dffff7; }
+    .warning{ border-left:5px solid var(--accent3); background:rgba(255,107,154,.10); padding:14px 16px; border-radius:16px; margin-top:12px; color:#ffe1ec; }
+    ul{padding-left:22px; color:var(--muted)} li{margin:7px 0} strong{color:#fff}
+    .table-wrap{overflow:auto; border-radius:18px; border:1px solid var(--border)}
+    table{width:100%; border-collapse:collapse; min-width:760px; background:rgba(0,0,0,.18)}
+    th,td{padding:14px; text-align:left; border-bottom:1px solid var(--border); vertical-align:top}
+    th{color:#07111f; background:linear-gradient(135deg, var(--accent), var(--accent2)); font-weight:900} td{color:var(--muted)} .compare td:first-child{font-weight:900; color:#fff}
+    details{ border:1px solid var(--border); background:rgba(0,0,0,.18); border-radius:18px; padding:14px 16px; margin:12px 0; }
+    summary{cursor:pointer; font-weight:900; color:var(--accent2)} .mini{ font-size:.92rem; color:var(--muted); }
+    .flashcards{ display:grid; grid-template-columns:repeat(auto-fit, minmax(230px,1fr)); gap:14px; }
+    .flash{ perspective:1000px; min-height:150px; }
+    .flash-inner{ transition:transform .65s; transform-style:preserve-3d; position:relative; min-height:150px; cursor:pointer; }
+    .flash.flipped .flash-inner{transform:rotateY(180deg)}
+    .face{ position:absolute; inset:0; backface-visibility:hidden; border:1px solid var(--border); border-radius:20px; background:linear-gradient(135deg, rgba(255,255,255,.15), rgba(0,0,0,.16)); padding:18px; display:flex; flex-direction:column; justify-content:center; box-shadow:0 16px 32px rgba(0,0,0,.20); }
+    .back{transform:rotateY(180deg); background:rgba(124,247,212,.12)}
+    .qbox{ border:1px solid var(--border); background:rgba(0,0,0,.18); border-radius:20px; padding:18px; margin:14px 0; }
+    .answer{ display:none; border-left:4px solid var(--good); padding:10px 14px; margin-top:12px; background:rgba(87,227,137,.10); border-radius:12px; color:#e9fff0; }
+    .checklist label{ display:block; padding:10px 12px; border:1px solid var(--border); border-radius:14px; margin:8px 0; background:rgba(0,0,0,.14); color:var(--muted); }
+    input[type="checkbox"]{transform:scale(1.2); margin-right:8px}
+    .search{ width:100%; padding:16px 18px; border-radius:18px; border:1px solid var(--border); background:rgba(0,0,0,.28); color:var(--text); font-size:1rem; outline:none; margin:10px 0 20px; }
+    mark{background:rgba(255,209,102,.55); color:#fff; border-radius:4px}
+    .footer{ text-align:center; color:var(--muted); padding:22px; }
+    .badge-row{display:flex; flex-wrap:wrap; gap:8px; margin:16px 0}
+    .topic-title{display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap}
+    .score{color:var(--accent); font-weight:900}
+    @media (max-width:900px){ .card,.card.big{grid-column:1/-1} .hero{padding:26px} section{padding:20px} }
+  </style>
+</head>
+<body>
+  <div class="noise"></div>
+  <header>
+    <div class="hero">
+      <span class="tag">📘 PPIT Mid 1 • Roman Urdu + English • Exam Ready</span>
+      <h1>Professional Practices in IT <span class="gradient">Super Easy Learning Page</span></h1>
+      <p class="subtitle">Ye page aapke PDF content ko easiest Roman Urdu/English mein convert karta hai: simple explanations, exam-short answers, examples, flashcards, MCQs, aur quick revision checklist.</p>
+      <div class="badge-row">
+        <span class="pill">✅ Easy Language</span>
+        <span class="pill">✅ Paper-Ready Answers</span>
+        <span class="pill">✅ Mid Exam Revision</span>
+      </div>
+      <div class="hero-actions">
+        <a class="btn" href="#exam-crash">⚡ Start 15-Min Revision</a>
+        <a class="btn secondary" href="#questions">🧠 Practice Questions</a>
+      </div>
+    </div>
+  </header>
+  <nav><div class="nav-inner"><a href="#exam-crash">Crash Revision</a><a href="#profession">Profession</a><a href="#ethics">Ethics</a><a href="#decision">Decision Making</a><a href="#theories">Theories</a><a href="#codes">Codes</a><a href="#flashcards">Flashcards</a></div></nav>
+  <main id="content">
+    <input class="search" id="searchBox" placeholder="🔍 Search topic..." oninput="filterSections()"/>
+    
+    <section id="exam-crash" data-keywords="crash revision exam important mid">
+      <div class="topic-title"><h2>⚡ 15-Minute Exam Crash Revision</h2><span class="score">Most Repeated Concepts</span></div>
+      <div class="grid">
+        <div class="card"><h3>1️⃣ Profession</h3><p><strong>Profession</strong> sirf job nahi hoti. Profession woh field hoti hai jahan expert knowledge, autonomy, internal governance, aur society service hoti hai.</p><div class="exam"><strong>Exam line:</strong> Professional ka mindset hota hai: “Problem batao, solution main decide karunga.”</div></div>
+        <div class="card"><h3>2️⃣ Ethics</h3><p><strong>Ethics</strong> moral principles hain jo batate hain kya right hai aur kya wrong.</p><div class="exam"><strong>Exam line:</strong> Knowledge without goodness dangerous hota hai.</div></div>
+        <div class="card"><h3>3️⃣ Codes of Conduct</h3><p>Codes professionals ko guide karte hain: honesty, privacy, fairness.</p></div>
+      </div>
+    </section>
+
+    <section id="profession">
+      <h2>🏛️ Topic 1: Evolution & Characteristics of Profession</h2>
+      <div class="simple"><strong>Easy idea:</strong> Profession ka matlab sirf paisa kamaana nahi. Profession ka matlab responsible expert work hai jo society ko benefit de.</div>
+      <div class="grid">
+        <div class="card big"><h3>🌾 Evolution of Professions</h3><ul><li><strong>Agrarian:</strong> farming.</li><li><strong>Industrial:</strong> factories, capitalism.</li><li><strong>ICT:</strong> information age, new IT jobs.</li></ul></div>
+        <div class="card big"><h3>🛠️ Technician vs Professional</h3><div class="table-wrap"><table class="compare"><tr><th>Technician</th><th>Professional</th></tr><tr><td>“Mujhe batao kya karna hai.”</td><td>“Problem batao, best solution main decide karunga.”</td></tr><tr><td>Instruction follow karta hai.</td><td>Judgment aur expertise use karta hai.</td></tr></table></div></div>
+      </div>
+      <h3>✅ Characteristics of a True Profession</h3>
+      <div class="grid">
+        <div class="card"><h3>1. Expert Knowledge</h3><p>Special education, training chahiye.</p></div>
+        <div class="card"><h3>2. Autonomy</h3><p>Independent decision making.</p></div>
+        <div class="card"><h3>3. Internal Governance</h3><p>Rules, training, conduct control.</p></div>
+        <div class="card"><h3>4. Service to Society</h3><p>Public benefit.</p></div>
+      </div>
+    </section>
+    
+    <section id="theories">
+        <h2>🧩 Topic 4: Ethical Theories</h2>
+        <div class="grid">
+            <div class="card big"><h3>1️⃣ Consequentialism</h3><p>Action ko <strong>result</strong> se judge karta hai. Example: Utilitarianism.</p></div>
+            <div class="card big"><h3>2️⃣ Deontology</h3><p>Action ko <strong>duty</strong> se judge karta hai. Example: Kant.</p></div>
+        </div>
+    </section>
+
+    <section id="flashcards">
+      <h2>🃏 Flashcards — Click to Flip</h2>
+      <div class="flashcards">
+        <div class="flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="face"><h3>Profession?</h3></div><div class="face back"><p>Expert knowledge + autonomy + internal governance + service to society.</p></div></div></div>
+        <div class="flash" onclick="this.classList.toggle('flipped')"><div class="flash-inner"><div class="face"><h3>Ethics?</h3></div><div class="face back"><p>Moral principles jo right/wrong behavior guide karte hain.</p></div></div></div>
+      </div>
+    </section>
+  </main>
+  <script>
+    function toggleAnswer(btn){ const ans = btn.nextElementSibling; ans.style.display = ans.style.display === 'block' ? 'none' : 'block'; btn.textContent = ans.style.display === 'block' ? 'Hide Answer' : 'Show Answer'; }
+    function filterSections(){ const q = document.getElementById('searchBox').value.trim().toLowerCase(); const sections = document.querySelectorAll('main section'); sections.forEach(sec=>{ const text = (sec.innerText + ' ' + (sec.dataset.keywords || '')).toLowerCase(); sec.style.display = text.includes(q) ? '' : 'none'; }); }
+  </script>
+</body>
+</html>
+    </textarea>
+
+    <textarea id="data-mid2" style="display:none;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<style>
+    :root{ --bg:#070812; --card:#101426; --card2:#151b31; --text:#eef3ff; --muted:#b7c0dd; --brand:#7c3cff; --brand2:#00e5ff; --accent:#ffcc00; --good:#25d366; --bad:#ff5c7c; --line:rgba(255,255,255,.12); --shadow:0 18px 50px rgba(0,0,0,.35); --radius:24px; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{ margin:0; font-family:Inter,Segoe UI,Roboto,Arial,sans-serif; background: radial-gradient(circle at 20% 0%,rgba(124,60,255,.35),transparent 35%), radial-gradient(circle at 90% 15%,rgba(0,229,255,.25),transparent 35%), radial-gradient(circle at 40% 100%,rgba(255,204,0,.12),transparent 28%), var(--bg); color:var(--text); line-height:1.65; }
+    a{color:inherit;text-decoration:none} .wrap{width:min(1180px,92%);margin:auto}
+    .hero{ min-height:92vh; display:grid; place-items:center; position:relative; overflow:hidden; padding:70px 0 40px; }
+    .hero:before,.hero:after{ content:"";position:absolute;border:1px solid rgba(255,255,255,.08);border-radius:50%; width:520px;height:520px;animation:spin 28s linear infinite; }
+    .hero:before{left:-180px;top:80px} .hero:after{right:-220px;bottom:-120px;animation-direction:reverse}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .badge{ display:inline-flex;gap:10px;align-items:center;padding:9px 14px;border:1px solid var(--line); border-radius:999px;background:rgba(255,255,255,.06);backdrop-filter:blur(14px);color:#dfe7ff;font-weight:700; }
+    .hero-card{ position:relative;z-index:2;text-align:center;padding:36px;border:1px solid var(--line); border-radius:32px;background:rgba(16,20,38,.72);box-shadow:var(--shadow);backdrop-filter:blur(18px); }
+    h1{font-size:clamp(2.4rem,6vw,5.5rem);line-height:1;margin:24px 0 12px;letter-spacing:-2px}
+    .gradient-text{background:linear-gradient(90deg,var(--brand2),#fff,var(--accent),#ff73e6);-webkit-background-clip:text;color:transparent}
+    .subtitle{font-size:clamp(1rem,2vw,1.25rem);max-width:880px;margin:0 auto;color:var(--muted)}
+    .hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:30px}
+    .stat{padding:18px;border:1px solid var(--line);border-radius:20px;background:rgba(255,255,255,.05)}
+    .stat strong{display:block;font-size:1.8rem;color:white} .stat span{color:var(--muted);font-size:.92rem}
+    .nav{ position:sticky;top:0;z-index:50;background:rgba(7,8,18,.78);backdrop-filter:blur(18px); border-bottom:1px solid var(--line); }
+    .nav .wrap{display:flex;gap:10px;overflow:auto;padding:12px 0}
+    .nav a{white-space:nowrap;padding:9px 13px;border:1px solid var(--line);border-radius:999px;color:#dce5ff;background:rgba(255,255,255,.04);font-size:.92rem}
+    .nav a:hover{background:linear-gradient(90deg,rgba(124,60,255,.35),rgba(0,229,255,.22))}
+    section{padding:60px 0} .section-title{font-size:clamp(1.9rem,3.5vw,3rem);line-height:1.15;margin:0 0 10px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px} .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
+    .card{ background:linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,.035)); border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow); }
+    .card h3{margin:0 0 10px;font-size:1.25rem} .card p,.card li{color:#dbe3ff}
+    .chip{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(0,229,255,.12);border:1px solid rgba(0,229,255,.25);font-weight:700;color:#ccfbff;font-size:.8rem;margin-bottom:12px}
+    .timeline{position:relative;margin-left:8px}.timeline:before{content:"";position:absolute;left:18px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--brand2),var(--brand),var(--accent))}
+    .step{position:relative;padding-left:54px;margin:20px 0}.step:before{content:attr(data-step);position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--brand),var(--brand2));font-weight:900;color:white}
+    .flashcards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.flash{min-height:150px;perspective:900px;cursor:pointer}.flash-inner{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}.flash.flip .flash-inner{transform:rotateY(180deg)}.front,.back{position:absolute;inset:0;border-radius:22px;border:1px solid var(--line);padding:20px;backface-visibility:hidden;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:900;background:linear-gradient(145deg,rgba(124,60,255,.18),rgba(255,255,255,.06))}.back{transform:rotateY(180deg);background:linear-gradient(145deg,rgba(0,229,255,.16),rgba(255,204,0,.08))}
+    @media(max-width:900px){.grid,.grid-2,.hero-grid,.flashcards{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="top" class="hero">
+  <div class="wrap hero-card">
+    <div class="badge">⚡ PPIT MID 2 • Roman Urdu + Easy English • Exam Focused</div>
+    <h1><span class="gradient-text">Professional Practices in IT</span><br/>Learning Page</h1>
+    <p class="subtitle">Is page mein PPIT Mid 2 ke topics ko easiest Roman Urdu/English mein convert kiya gaya hai: Ethical Decision Making, Law, Intellectual Property, Copyright, Patents, Privacy, Data Protection aur IT Contracts.</p>
+  </div>
+</div>
+<nav class="nav"><div class="wrap"><a href="#ethics">Ethical Decision</a><a href="#ip">IP Rights</a><a href="#flash">Flashcards</a></div></nav>
+
+<section id="ethics"><div class="wrap">
+  <h2 class="section-title">1. Ethical Decision Making</h2>
+  <div class="grid">
+    <div class="card"><span class="chip">Informal Tests</span><h3>Quick Gut Checks</h3><ul><li><b>Shush Test:</b> Agar kaam chupana par raha hai, issue hai.</li><li><b>Mom Test:</b> Kya apni mother ko proudly bata sakte ho?</li><li><b>TV Test:</b> National TV par explain karna comfortable hoga?</li></ul></div>
+    <div class="card"><span class="chip yellow">Formal Guidelines</span><h3>Proper Rules</h3><ul><li><b>Corporate Policy:</b> Company ke rules.</li><li><b>Golden Rule:</b> Dusron ke sath waisa karo jaisa apne liye chahte ho.</li></ul></div>
+  </div>
+  <div class="card" style="margin-top:22px">
+    <span class="chip green">Expected Long Question</span>
+    <h3>4-Step Process for Ethical Decision Making</h3>
+    <div class="timeline">
+      <div class="step" data-step="1"><b>Understand the Situation:</b> Facts neutral way mein likho.</div>
+      <div class="step" data-step="2"><b>Isolate Major Dilemma:</b> Exact question banao: “Should X do Y or not?”</div>
+      <div class="step" data-step="3"><b>Analyze Alternatives:</b> Consequences, rights/duties compare karo.</div>
+      <div class="step" data-step="4"><b>Decision + Implementation:</b> Final defensible decision do.</div>
+    </div>
+  </div>
+</div></section>
+
+<section id="ip"><div class="wrap">
+  <h2 class="section-title">2. Intellectual Property Rights</h2>
+  <div class="grid">
+    <div class="card"><h3>1) Copyright</h3><p>Original works protect karta hai, including computer programs.</p></div>
+    <div class="card"><h3>2) Trademark</h3><p>Word, logo, name, symbol jo goods/services ki source identify kare.</p></div>
+    <div class="card"><h3>3) Patent</h3><p>New, useful, non-obvious invention ke liye temporary monopoly (20 years).</p></div>
+  </div>
+</div></section>
+
+<section id="flash"><div class="wrap">
+  <h2 class="section-title">3. Click Flashcards</h2>
+  <div class="flashcards">
+    <div class="flash"><div class="flash-inner"><div class="front">Shush Test</div><div class="back">Agar action chupana paray, ethical issue ho sakta hai.</div></div></div>
+    <div class="flash"><div class="flash-inner"><div class="front">Golden Rule</div><div class="back">Dusron ke sath waisa karo jaisa apne liye chahte ho.</div></div></div>
+    <div class="flash"><div class="flash-inner"><div class="front">Patent Term Pakistan</div><div class="back">20 years.</div></div></div>
+  </div>
+</div></section>
+
+<script>document.querySelectorAll('.flash').forEach(card => card.addEventListener('click',()=>card.classList.toggle('flip')));</script>
+</body>
+</html>
+    </textarea>
+
+    <textarea id="data-final" style="display:none;">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root{ --bg:#07111f; --card:#0e1b2f; --card2:#10243f; --text:#f5f7fb; --muted:#b7c3d7; --brand:#7c3aed; --brand2:#06b6d4; --brand3:#22c55e; --warn:#f59e0b; --danger:#ef4444; --line:rgba(255,255,255,.12); --shadow: 0 22px 60px rgba(0,0,0,.35); --radius: 22px; }
+    *{box-sizing:border-box} html{scroll-behavior:smooth}
+    body{ margin:0; font-family: Inter, Segoe UI, Roboto, Arial, sans-serif; color:var(--text); background: radial-gradient(circle at top left, rgba(124,58,237,.35), transparent 34%), radial-gradient(circle at top right, rgba(6,182,212,.25), transparent 30%), linear-gradient(135deg, #06101d 0%, #081525 48%, #06101d 100%); line-height:1.65; }
+    .shell{width:min(1180px, 92vw); margin:auto;}
+    .hero{ min-height:86vh; display:grid; align-items:center; padding:70px 0 42px; position:relative; overflow:hidden; }
+    .grid-bg{ position:absolute; inset:0; pointer-events:none; opacity:.25; background-image: linear-gradient(rgba(255,255,255,.07) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.07) 1px, transparent 1px); background-size:44px 44px; mask-image:linear-gradient(to bottom, black, transparent 88%); }
+    .hero-card{ position:relative; padding:46px; border:1px solid var(--line); border-radius:32px; background:linear-gradient(145deg, rgba(14,27,47,.92), rgba(16,36,63,.72)); box-shadow:var(--shadow); backdrop-filter: blur(14px); }
+    .badge{ display:inline-flex; gap:8px; align-items:center; padding:8px 14px; border:1px solid rgba(255,255,255,.14); border-radius:999px; color:#d9f99d; background:rgba(34,197,94,.10); font-weight:700; margin-bottom:18px; }
+    h1{ margin:0 0 14px; font-size: clamp(38px, 6vw, 78px); line-height:1.02; letter-spacing:-2.2px; }
+    .gradient{background:linear-gradient(90deg,#a78bfa,#22d3ee,#86efac); -webkit-background-clip:text; color:transparent;}
+    .lead{font-size:clamp(18px,2vw,24px); color:var(--muted); max-width:880px; margin:0 0 26px}
+    .stats{ display:grid; grid-template-columns: repeat(4,1fr); gap:14px; margin-top:30px; }
+    .stat{ padding:18px; border-radius:20px; background:rgba(255,255,255,.06); border:1px solid var(--line); }
+    .stat b{font-size:28px; display:block} .stat span{color:var(--muted); font-size:14px}
+    nav{ position:sticky; top:0; z-index:50; background:rgba(7,17,31,.78); backdrop-filter: blur(16px); border-bottom:1px solid var(--line); }
+    .nav-inner{display:flex; gap:10px; overflow:auto; padding:12px 0}
+    .nav-inner a{ color:var(--muted); text-decoration:none; padding:9px 13px; border-radius:999px; white-space:nowrap; background:rgba(255,255,255,.04); border:1px solid transparent; font-weight:700; }
+    section{padding:58px 0} .section-title{ display:flex; align-items:end; justify-content:space-between; gap:16px; margin-bottom:24px; }
+    h2{font-size:clamp(30px,4vw,46px); line-height:1.08; margin:0; letter-spacing:-1px} .subtitle{color:var(--muted); margin:8px 0 0; max-width:780px}
+    .cards{display:grid; grid-template-columns:repeat(3,1fr); gap:18px}
+    .card{ background:linear-gradient(145deg, rgba(14,27,47,.96), rgba(15,35,63,.86)); border:1px solid var(--line); border-radius:var(--radius); padding:24px; position:relative; overflow:hidden; }
+    h3{font-size:22px; margin:0 0 10px} .tag{ display:inline-block; padding:5px 10px; border-radius:999px; font-size:12px; font-weight:800; background:rgba(124,58,237,.2); color:#ddd6fe; border:1px solid rgba(167,139,250,.28); margin-bottom:12px; }
+    ul{margin:12px 0 0; padding-left:20px} li{margin:7px 0}
+    .table-wrap{overflow:auto; border-radius:20px; border:1px solid var(--line); background:rgba(255,255,255,.04)}
+    table{width:100%; border-collapse:collapse; min-width:720px} th,td{padding:14px 16px; border-bottom:1px solid var(--line); vertical-align:top} th{background:rgba(124,58,237,.22); text-align:left}
+    .note{ border-left:5px solid var(--brand2); background:rgba(6,182,212,.09); padding:18px 20px; border-radius:16px; color:#e0f2fe; margin:18px 0; }
+    @media(max-width:930px){ .cards,.flashgrid{grid-template-columns:1fr} }
+  </style>
+</head>
+<body>
+  <div class="hero">
+    <div class="grid-bg"></div>
+    <div class="shell">
+      <div class="hero-card">
+        <span class="badge">🎓 PPIT Final • Roman Urdu + English • Exam Mode</span>
+        <h1>Professional Practices in IT <span class="gradient">Final Learning Page</span></h1>
+        <p class="lead">Yeh page PPIT Final ke topics ko bilkul easy Roman Urdu/English mein convert karta hai: Computer Crimes, Cyber Forensics, Organizations, Management, Leadership, Communication, Conflict aur Negotiation.</p>
+        <div class="stats">
+          <div class="stat"><b>8</b><span>Main Exam Units</span></div>
+          <div class="stat"><b>30+</b><span>Short Notes</span></div>
+          <div class="stat"><b>20</b><span>MCQs</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <nav>
+    <div class="shell nav-inner">
+      <a href="#quick">Quick Revision</a>
+      <a href="#crime">Computer Crimes</a>
+      <a href="#management">Management</a>
+    </div>
+  </nav>
+
+  <main class="shell">
+    <section id="quick">
+      <div class="section-title"><div><h2>⚡ One-Page Quick Revision</h2><p class="subtitle">Exam se pehle yeh section 2 dafa read kar lo. Core concepts yaad ho jayen ge.</p></div></div>
+      <div class="cards searchable" style="margin-top:18px">
+        <div class="card"><span class="tag">Cybercrime</span><h3>Computer Crime kya hai?</h3><p>Computer ya internet ko use karke law break karna. Simple: computer se fraud, hacking, virus, data theft, ransomware waghera.</p></div>
+        <div class="card"><span class="tag">Forensics</span><h3>Computer Forensics</h3><p>Digital evidence ko collect, analyze aur court-friendly report banana.</p></div>
+        <div class="card"><span class="tag">Management</span><h3>4 Functions</h3><p>Planning, Organizing, Leading, Controlling.</p></div>
+        <div class="card"><span class="tag">Leadership</span><h3>Leader vs Manager</h3><p>Leader inspire karta hai. Manager plan aur control karta hai. Leader kehta hai “Let’s go”, manager kehta hai “Go”.</p></div>
+      </div>
+    </section>
+
+    <section id="crime">
+      <div class="section-title"><div><h2>🕵️ Computer Crimes & Forensics</h2></div></div>
+      <div class="table-wrap" style="margin-top:18px">
+        <table>
+          <thead><tr><th>Computer Crime Type</th><th>Easy Meaning</th><th>Roman Urdu Example</th></tr></thead>
+          <tbody>
+            <tr><td><b>Computer Fraud</b></td><td>Computer system manipulate karke money/property/service lena.</td><td>Fake employee payroll mein add kar dena.</td></tr>
+            <tr><td><b>Hacking</b></td><td>Unauthorized access lena ya attempt karna.</td><td>Company database mein bina permission login.</td></tr>
+            <tr><td><b>Impairing Access</b></td><td>Legitimate users ko data/system access se rokna.</td><td>DoS attack se website down kar dena.</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
+    </textarea>
+
+    <script>
+        // Tab Loader logic via srcdoc to prevent CSS clashing
+        function loadTab(tabId, btnElement) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+
+            const rawHTML = document.getElementById(`data-${tabId}`).value;
+            const iframe = document.getElementById('viewer');
+            iframe.srcdoc = rawHTML;
+        }
+
+        // Init
+        document.addEventListener("DOMContentLoaded", () => {
+            loadTab('mid1', document.querySelectorAll('.tab-btn')[0]);
+        });
+
+        // 3D Background Logic
+        const container = document.getElementById('canvas-container');
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.FogExp2(0x030305, 0.03);
+        
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        camera.position.z = 8;
+        
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const particlesGeometry = new THREE.BufferGeometry();
+        const particlesCount = 1500;
+        const posArray = new Float32Array(particlesCount * 3);
+        
+        for(let i = 0; i < particlesCount * 3; i++) {
+            posArray[i] = (Math.random() - 0.5) * 25; 
+        }
+        
+        particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+        const particlesMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x00ffc8,
+            transparent: true,
+            opacity: 0.5,
+            blending: THREE.AdditiveBlending
+        });
+        
+        const particleMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+        scene.add(particleMesh);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
+        scene.add(ambientLight);
+        const pointLight1 = new THREE.PointLight(0x00ffc8, 2, 50);
+        pointLight1.position.set(5, 5, 5);
+        scene.add(pointLight1);
+        const pointLight2 = new THREE.PointLight(0x0077ff, 2, 50);
+        pointLight2.position.set(-5, -5, 5);
+        scene.add(pointLight2);
+
+        let mouseX = 0;
+        let mouseY = 0;
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX - window.innerWidth / 2);
+            mouseY = (event.clientY - window.innerHeight / 2);
+        });
+
+        const clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            particleMesh.rotation.y = elapsedTime * 0.03;
+            particleMesh.rotation.x = elapsedTime * 0.01;
+
+            const targetX = mouseX * 0.0005;
+            const targetY = mouseY * 0.0005;
+            
+            camera.position.x += (targetX - camera.position.x) * 0.05;
+            camera.position.y += (-targetY - camera.position.y) * 0.05;
+            camera.lookAt(0, 0, 0);
+
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+    </script>
+</body>
+</html>
