@@ -1,2 +1,1 @@
-# Professional_Practices_in_Technology_Notes_For_Revision
-Professional_Practices_in_Technology_Notes_For_Revision
+
